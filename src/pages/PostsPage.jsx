@@ -52,9 +52,10 @@ export default function PostsPage({ feed = false }) {
   const filtered = useMemo(() => {
     if (!posts) return [];
     return posts
+      .filter((p) => (feed ? String(p.userId) !== String(currentUser.id) : true))
       .filter((p) => (queryId === "" ? true : String(p.id) === queryId.trim()))
       .filter((p) => (debouncedTitle === "" ? true : p.title.toLowerCase().includes(debouncedTitle.toLowerCase())));
-  }, [posts, queryId, debouncedTitle]);
+  }, [posts, feed, currentUser.id, queryId, debouncedTitle]);
 
   async function handleAdd(event) {
     event.preventDefault();
