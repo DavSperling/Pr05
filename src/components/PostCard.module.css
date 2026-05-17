@@ -1,0 +1,44 @@
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid transparent;
+}
+
+.selected { border-color: var(--primary); background: #eef2ff; }
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.id { color: var(--text-muted); font-size: 13px; }
+.title { margin: 0; font-size: 15px; flex: 1; }
+.titleInput { flex: 1; font-size: 15px; }
+.author { color: var(--text-muted); font-size: 12px; }
+
+.body {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.body p { margin: 0; color: var(--text); font-size: 14px; }
+
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.action, .actionDanger, .selectBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+.action:hover, .selectBtn:hover { background: var(--surface-alt); color: var(--text); }
+.actionDanger { color: var(--danger); }
+.actionDanger:hover { background: #fee2e2; }
+.selectBtn { margin-top: 8px; }
