@@ -55,13 +55,20 @@ export default function AlbumsPage() {
   async function handleDelete(id) {
     const target = (cache.get(key) ?? []).find((a) => a.id === id);
     if (!target || String(target.userId) !== String(userId)) throw new Error("Not authorized");
-    const photos = await listAllPhotosByAlbum(id);
-    for (const photo of photos) {
-      await deletePhoto(photo.id);
+    try {
+      const photos = await listAllPhotosByAlbum(id);
+      for (const photo of photos) {
+        try { await deletePhoto(photo.id); } catch { /* already gone */ }
+      }
+    } catch { /* listing failed — proceed to album delete anyway */ }
+    try {
+      await deleteAlbum(id);
+    } catch (err) {
+      if (!String(err?.message ?? "").includes("(404)")) throw err;
     }
-    await deleteAlbum(id);
+    const list = cache.get(key);
+    if (Array.isArray(list)) cache.set(key, list.filter((a) => a.id !== id));
     cache.invalidate(`photos?albumId=${id}`);
-    cache.set(key, albums.filter((a) => a.id !== id));
   }
 
   return (

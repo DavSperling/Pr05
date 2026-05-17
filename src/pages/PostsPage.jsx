@@ -76,14 +76,23 @@ export default function PostsPage({ feed = false }) {
 
   async function handleDelete(id) {
     if (feed) throw new Error("Deleting other users' posts is not allowed");
-    const comments = await listCommentsByPost(id);
-    for (const comment of comments) {
-      await deleteComment(comment.id);
+    try {
+      const comments = await listCommentsByPost(id);
+      for (const comment of comments) {
+        try { await deleteComment(comment.id); } catch { /* already gone */ }
+      }
+    } catch { /* listing failed — proceed to post delete anyway */ }
+    try {
+      await deletePost(id);
+    } catch (err) {
+      if (!String(err?.message ?? "").includes("(404)")) throw err;
     }
-    await deletePost(id);
+    const myList = cache.get(myKey);
+    if (Array.isArray(myList)) cache.set(myKey, myList.filter((p) => p.id !== id));
+    const allList = cache.get(allKey);
+    if (Array.isArray(allList)) cache.set(allKey, allList.filter((p) => p.id !== id));
     cache.invalidate(`comments?postId=${id}`);
-    cache.set(myKey, (cache.get(myKey) ?? []).filter((p) => p.id !== id));
-    cache.invalidate(allKey);
+    if (String(selectedId) === String(id)) updateParam("post", "");
   }
 
   return (
