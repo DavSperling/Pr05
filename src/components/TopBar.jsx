@@ -8,11 +8,10 @@ import styles from "./TopBar.module.css";
 export default function TopBar() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  const cache = useContext(DataContext);
   const [infoOpen, setInfoOpen] = useState(false);
 
   if (!currentUser) return null;
-
-  const cache = useContext(DataContext);
 
   function handleLogout() {
     logout();
