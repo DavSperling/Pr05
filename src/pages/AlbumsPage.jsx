@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import TopBar from "../components/TopBar.jsx";
 import AlbumCard from "../components/AlbumCard.jsx";
 import { createAlbum, deleteAlbum, listAlbumsByUser, updateAlbum } from "../api/albums.js";
+import { deletePhoto, listAllPhotosByAlbum } from "../api/photos.js";
 import { DataContext } from "../contexts/DataContext.jsx";
 import { useAuth } from "../hooks/useAuth.js";
 import { useDebounce } from "../hooks/useDebounce.js";
@@ -54,7 +55,12 @@ export default function AlbumsPage() {
   async function handleDelete(id) {
     const target = (cache.get(key) ?? []).find((a) => a.id === id);
     if (!target || String(target.userId) !== String(userId)) throw new Error("Not authorized");
+    const photos = await listAllPhotosByAlbum(id);
+    for (const photo of photos) {
+      await deletePhoto(photo.id);
+    }
     await deleteAlbum(id);
+    cache.invalidate(`photos?albumId=${id}`);
     cache.set(key, albums.filter((a) => a.id !== id));
   }
 

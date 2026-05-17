@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import TopBar from "../components/TopBar.jsx";
 import CommentList from "../components/CommentList.jsx";
@@ -9,14 +9,55 @@ import { useAuth } from "../hooks/useAuth.js";
 import { useResource } from "../hooks/useResource.js";
 import styles from "./PostDetailPage.module.css";
 
+function findPostInLists(cache, postId, currentUserId) {
+  const numericId = Number(postId);
+  for (const key of [`posts?userId=${currentUserId}`, `posts`]) {
+    const list = cache.get(key);
+    if (Array.isArray(list)) {
+      const hit = list.find((p) => p.id === numericId);
+      if (hit) return hit;
+    }
+  }
+  return null;
+}
+
 export default function PostDetailPage() {
   const { currentUser } = useAuth();
   const { postId, userId } = useParams();
   const cache = useContext(DataContext);
-  const postKey = `posts/${postId}`;
   const commentsKey = `comments?postId=${postId}`;
 
-  const { data: post, loading: postLoading, error: postError } = useResource(postKey, () => getPost(postId));
+  const [post, setPost] = useState(null);
+  const [postLoading, setPostLoading] = useState(true);
+  const [postError, setPostError] = useState(null);
+
+  useEffect(() => {
+    setPostError(null);
+    const cached = findPostInLists(cache, postId, currentUser.id);
+    if (cached) {
+      setPost(cached);
+      setPostLoading(false);
+      return;
+    }
+    let active = true;
+    setPost(null);
+    setPostLoading(true);
+    getPost(postId)
+      .then((p) => {
+        if (!active) return;
+        setPost(p);
+        setPostLoading(false);
+      })
+      .catch((err) => {
+        if (!active) return;
+        setPostError(err);
+        setPostLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [postId, currentUser.id, cache]);
+
   const { data: comments, loading: cmtLoading, error: cmtError } = useResource(commentsKey, () => listCommentsByPost(postId));
 
   async function handleAdd(body) {

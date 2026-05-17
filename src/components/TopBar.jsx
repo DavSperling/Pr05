@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { DataContext } from "../contexts/DataContext.jsx";
 import UserInfoModal from "./UserInfoModal.jsx";
@@ -7,7 +7,6 @@ import styles from "./TopBar.module.css";
 
 export default function TopBar() {
   const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
   const cache = useContext(DataContext);
   const [infoOpen, setInfoOpen] = useState(false);
 
@@ -16,7 +15,7 @@ export default function TopBar() {
   function handleLogout() {
     logout();
     cache.clear();
-    navigate("/login", { replace: true });
+    window.location.replace("/login");
   }
 
   const base = `/users/${currentUser.id}`;

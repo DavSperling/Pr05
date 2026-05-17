@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import TopBar from "../components/TopBar.jsx";
 import PostCard from "../components/PostCard.jsx";
 import { createPost, deletePost, listAllPosts, listPostsByUser, updatePost } from "../api/posts.js";
+import { deleteComment, listCommentsByPost } from "../api/comments.js";
 import { apiGet } from "../api/client.js";
 import { DataContext } from "../contexts/DataContext.jsx";
 import { useAuth } from "../hooks/useAuth.js";
@@ -75,7 +76,12 @@ export default function PostsPage({ feed = false }) {
 
   async function handleDelete(id) {
     if (feed) throw new Error("Deleting other users' posts is not allowed");
+    const comments = await listCommentsByPost(id);
+    for (const comment of comments) {
+      await deleteComment(comment.id);
+    }
     await deletePost(id);
+    cache.invalidate(`comments?postId=${id}`);
     cache.set(myKey, (cache.get(myKey) ?? []).filter((p) => p.id !== id));
     cache.invalidate(allKey);
   }
