@@ -1,0 +1,29 @@
+.card {
+  background: var(--surface);
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.id { color: var(--text-muted); font-size: 13px; }
+.title { font-size: 15px; color: var(--text); font-weight: 500; }
+.title:hover { color: var(--primary); }
+.titleInput { font-size: 15px; }
+
+.actions { display: flex; gap: 6px; }
+
+.btn, .btnDanger {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.btnDanger { color: var(--danger); }
+.btn:hover { background: var(--surface-alt); color: var(--text); }
+.btnDanger:hover { background: #fee2e2; }
