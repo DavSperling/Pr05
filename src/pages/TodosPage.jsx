@@ -9,6 +9,7 @@ import { useDebounce } from "../hooks/useDebounce.js";
 import { useResource } from "../hooks/useResource.js";
 import styles from "./TodosPage.module.css";
 
+// three filter parameters: queryId for filtering by ID, queryTitle for filtering by title, and queryDone for filtering by completion status.
 const SORTS = {
   id: (a, b) => a.id - b.id,
   title: (a, b) => a.title.localeCompare(b.title),

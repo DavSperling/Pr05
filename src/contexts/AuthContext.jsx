@@ -6,6 +6,7 @@ const STORAGE_KEY = "currentUser";
 
 export const AuthContext = createContext(null);
 
+// We store the current user in localStorage to persist the login state across page reloads.
 function readFromStorage() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);

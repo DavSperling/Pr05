@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from "./CommentList.module.css";
 
 export default function CommentList({ comments, viewerEmail, onAdd, onEdit, onDelete }) {
+  // draft - the content of the new comment being written by the user
   const [draft, setDraft] = useState("");
 
   async function submitNew(event) {

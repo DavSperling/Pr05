@@ -21,6 +21,7 @@ export default function AlbumsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryId = searchParams.get("id") ?? "";
   const queryTitle = searchParams.get("q") ?? "";
+  // debouncedTitle - a debounced version of queryTitle that only updates after the user has stopped typing for a short delay, preventing excessive filtering while the user is still entering their search.
   const debouncedTitle = useDebounce(queryTitle, 200);
   const [newTitle, setNewTitle] = useState("");
 
@@ -30,6 +31,7 @@ export default function AlbumsPage() {
     setSearchParams(next, { replace: true });
   }
 
+  // filtered - the list of albums filtered according to the current search parameters, memoized to avoid unnecessary recalculations the solution of the filter on every render.
   const filtered = useMemo(() => {
     if (!albums) return [];
     return albums

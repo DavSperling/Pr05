@@ -12,8 +12,11 @@ export default function PhotoGrid({ albumId }) {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  // lightbox - the photo currently shown in the lightbox, or null if the lightbox is closed
   const [lightbox, setLightbox] = useState(null);
+  // adding - whether the "add new photo" form is currently open
   const [adding, setAdding] = useState(false);
+  // newTitle - the title of the new photo being added
   const [newTitle, setNewTitle] = useState("");
 
   useEffect(() => {

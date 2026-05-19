@@ -15,6 +15,7 @@ import AlbumDetailPage from "./pages/AlbumDetailPage.jsx";
 
 export default function App() {
   return (
+    // AuthProvider provides the authentication context to the app, and DataProvider provides a simple caching layer for API data.
     <AuthProvider>
       <DataProvider>
         <BrowserRouter>

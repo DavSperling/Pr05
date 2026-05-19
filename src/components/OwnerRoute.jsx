@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 
+// OwnerRoute is a wrapper around a route that verifies that the current user is the owner of the resource of access.
 export default function OwnerRoute() {
   const { currentUser } = useAuth();
   const { userId } = useParams();

@@ -244,6 +244,21 @@
         "name": ""
       },
       "id": 11
+    },
+    {
+      "username": "neryh",
+      "name": "Nerya Cohen",
+      "email": "neriyh7@gmail.com",
+      "phone": "0546527155",
+      "website": "316482801",
+      "address": {
+        "street": "Jerusalem, 64 Agassi Shimon Street, Apartment 3",
+        "city": "Jerusalem"
+      },
+      "company": {
+        "name": ""
+      },
+      "id": 12
     }
   ],
   "credentials": [
@@ -301,6 +316,11 @@
       "id": 11,
       "userId": 11,
       "password": "david"
+    },
+    {
+      "userId": 12,
+      "password": "123456",
+      "id": 12
     }
   ],
   "todos": [
